@@ -28,6 +28,7 @@ resource "google_compute_instance" "vm_instance" {
   zone         = var.zone
   tags         = ["dev", "web"]
 
+
   boot_disk {
     initialize_params {
       image = "cos-cloud/cos-stable"
@@ -39,6 +40,12 @@ resource "google_compute_instance" "vm_instance" {
     access_config {
     }
   }
+
+}
+
+resource "google_service_account" "terraform_sa" {
+  account_id   = "final-408221"
+  display_name = "terraform_sa"
 }
 
 
@@ -93,6 +100,7 @@ resource "google_storage_bucket" "syanaboz_bucket" {
 resource "google_compute_disk" "default" {
   project  = "final-408221"
   name = "terraform-disk"
+  image = "debian-11-bullseye-v20231212"
   type = "pd-standard"
   zone = "us-west1-a"
   size = "10"
