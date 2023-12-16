@@ -70,9 +70,9 @@ resource "google_compute_firewall" "firewall_rules" {
 }
 
 
-resource "google_storage_bucket" "syanaboz_bucket" {
+resource "google_storage_bucket" "terraf_bucket" {
   project     = "final-408221"
-  name          = "bucket_terraform_sayanaboz"
+  name          = "terraform_bucket_for_final"
   location      = "US"
   force_destroy = true
 
@@ -95,13 +95,19 @@ resource "google_storage_bucket" "syanaboz_bucket" {
   }
 }
 
-# Using pd-standard because it's the default for Compute Engine
+
+resource "google_compute_attached_disk" "default" {
+  disk     = google_compute_disk.disk.id
+  instance = google_compute_instance.vm_instance.id
+  device_name = "terraf-disk"
+}
+
 
 resource "google_compute_disk" "disk" {
   project  = "final-408221"
   name = "terraf-disk"
   image = "debian-11-bullseye-v20231212"
   type = "pd-standard"
-  zone = "us-west1-a"
+  zone = "us-central1-f"
   size = "10"
 }
