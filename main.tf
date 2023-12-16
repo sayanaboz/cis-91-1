@@ -97,9 +97,9 @@ resource "google_storage_bucket" "syanaboz_bucket" {
 
 # Using pd-standard because it's the default for Compute Engine
 
-resource "google_compute_disk" "default" {
+resource "google_compute_disk" "disk" {
   project  = "final-408221"
-  name = "terraform-disk"
+  name = "terraf-disk"
   image = "debian-11-bullseye-v20231212"
   type = "pd-standard"
   zone = "us-west1-a"
