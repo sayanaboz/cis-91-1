@@ -9,3 +9,7 @@
         name:
           - apache2
           - php
+
+ - name: Format disk
+      shell: "sudo mkfs.ext4 /dev/sdb"
+      
