@@ -27,6 +27,8 @@ resource "google_compute_instance" "vm_instance" {
   machine_type = "f1-micro"
   zone         = var.zone
   tags         = ["dev", "web"]
+  allow_stopping_for_update = true
+  
 
 
   boot_disk {
@@ -44,8 +46,9 @@ resource "google_compute_instance" "vm_instance" {
 }
 
 resource "google_service_account" "terraform_sa" {
-  account_id   = "final-408221"
-  display_name = "terraform_sa"
+ account_id   = "final-408221"
+ display_name = "terraform_sa"
+
 }
 
 
@@ -54,20 +57,34 @@ output "ip" {
 }
 
 
+
+
 resource "google_compute_firewall" "firewall_rules" {
   project     = "final-408221"
-  name        = "terraform"
-  network     = "default"
-  description = "firewall rule for terraform"
+  name    = "terraf-firewall"
+  network = google_compute_network.default.name
 
   allow {
-    protocol  = "tcp"
-    ports     = ["80", "8080", "1000-2000"]
+    protocol = "icmp"
   }
 
-  source_tags = ["dev"]
-  target_tags = ["web"]
+  allow {
+    protocol = "tcp"
+    ports    = ["80", "8080", "1000-2000"]
+  }
+
+  source_tags = ["web"]
 }
+
+resource "google_compute_network" "default" {
+  name = "terraform-rules"
+}
+
+
+
+
+
+
 
 
 resource "google_storage_bucket" "terraf_bucket" {
@@ -93,6 +110,7 @@ resource "google_storage_bucket" "terraf_bucket" {
       type = "AbortIncompleteMultipartUpload"
     }
   }
+  public_access_prevention = "enforced"
 }
 
 
@@ -111,3 +129,4 @@ resource "google_compute_disk" "disk" {
   zone = "us-central1-f"
   size = "10"
 }
+
